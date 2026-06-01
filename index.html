@@ -19,7 +19,7 @@
       --font-mono:'DM Mono',monospace;
       --nav-h:68px;
     }
-    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    ,::before,*::after{box-sizing:border-box;margin:0;padding:0;}
     html{scroll-behavior:smooth;}
     body{background:var(--primary);color:var(--text);font-family:var(--font-body);font-size:16px;line-height:1.7;-webkit-font-smoothing:antialiased;}
     ::-webkit-scrollbar{width:5px;} ::-webkit-scrollbar-track{background:var(--primary);} ::-webkit-scrollbar-thumb{background:var(--surface3);border-radius:3px;}
@@ -196,7 +196,7 @@
   margin-bottom: 1.5rem;
 ">
   <img
-    src="Pictures/russ.jpg"
+    src="/pictures/russ.jpg"
     alt="Lucido"
     style="
       width: 100%;
@@ -359,7 +359,7 @@ Outside of studying, I like music, hanging out with friends, and occasionally pr
             <span style="font-size:.78rem;color:var(--text-muted);font-family:var(--font-mono);"></span>
           </div>
         </div>
-        <img src="pictures/pic.jpg" alt="Russel" style="width:64px;height:64px;border-radius:50%;border:2px solid var(--border-accent);object-fit:cover;display:block;">
+        <img src="/pictures/pic.jpg" alt="Russel" style="width:64px;height:64px;border-radius:50%;border:2px solid var(--border-accent);object-fit:cover;display:block;">
       </div>
       <div style="padding:2rem 2.5rem;display:grid;grid-template-columns:repeat(auto-fit,minmax(px,1fr));gap:2.5rem;">
         <div>
@@ -483,14 +483,14 @@ const awards = [
 
 const gallery = [
 
-  {img:'pictures/family2.jpg', title:'#2023',     cat:'Family', desc:'New Years celebration 2023.'},
-  {img:'pictures/family.jpg', title:'#2024',     cat:'Family', desc:'New Years celebration 2024.'},
-  {img:'pictures/delprado.jfif', title:'Villa Del Prado',          cat:'Friends', desc:'Our team huddle before entering the resort.'},
-  {img:'pictures/ilog1.jpg', title:'Confidants',          cat:'Friends', desc:'A good day out with the original crew — just us, a bamboo raft, and the river.'},
-  {img:'pictures/sports.jpg', title:'First Win', cat:'Sports',         desc:'First win in a basketball tournament with my friends — a moment of pure joy and teamwork.'},
-  {img:'pictures/rheamae.jfif',   title:'Only Us',            cat:'My One and Only', desc:'Me and my girlfriend, sharing a sweet moment together.'},
-  {img:'pictures/meandmyjowa.jfif',   title:'Me and My Jowa',            cat:'My One and Only', desc:'Another sweet moment shared with my partner.'},
-  {img:'pictures/rhea2.jfif',   title:'Best View',            cat:'My One and Only', desc:'A view I could never get tired of looking at.'},
+  {img:'/pictures/family2.jpg', title:'#2023',     cat:'Family', desc:'New Years celebration 2023.'},
+  {img:'/pictures/family.jpg', title:'#2024',     cat:'Family', desc:'New Years celebration 2024.'},
+  {img:'/pictures/delprado.jfif', title:'Villa Del Prado',          cat:'Friends', desc:'Our team huddle before entering the resort.'},
+  {img:'/pictures/ilog1.jpg', title:'Confidants',          cat:'Friends', desc:'A good day out with the original crew — just us, a bamboo raft, and the river.'},
+  {img:'/pictures/sports.jpg', title:'First Win', cat:'Sports',         desc:'First win in a basketball tournament with my friends — a moment of pure joy and teamwork.'},
+  {img:'/pictures/rheamae.jfif',   title:'Only Us',            cat:'My One and Only', desc:'Me and my girlfriend, sharing a sweet moment together.'},
+  {img:'/pictures/meandmyjowa.jfif',   title:'Me and My Jowa',            cat:'My One and Only', desc:'Another sweet moment shared with my partner.'},
+  {img:'/pictures/rhea2.jfif',   title:'Best View',            cat:'My One and Only', desc:'A view I could never get tired of looking at.'},
 ];
 
 
