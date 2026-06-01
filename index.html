@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lucido — Portfolio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --primary:#0a0a0a; --surface:#111118; --surface2:#1c1c28; --surface3:#252535;
+      --text:#f0ede8; --text-muted:#9898a8; --text-dim:#5a5a6a;
+      --border:rgba(255,255,255,0.08); --border-accent:rgba(232,197,71,0.3);
+      --gold:#e8c547; --gold-dim:rgba(232,197,71,0.12);
+      --radius:12px; --radius-sm:6px; --radius-lg:20px;
+      --font-display:'Playfair Display',Georgia,serif;
+      --font-body:'DM Sans',system-ui,sans-serif;
+      --font-mono:'DM Mono',monospace;
+      --nav-h:68px;
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    html{scroll-behavior:smooth;}
+    body{background:var(--primary);color:var(--text);font-family:var(--font-body);font-size:16px;line-height:1.7;-webkit-font-smoothing:antialiased;}
+    ::-webkit-scrollbar{width:5px;} ::-webkit-scrollbar-track{background:var(--primary);} ::-webkit-scrollbar-thumb{background:var(--surface3);border-radius:3px;}
+    h1,h2,h3{font-family:var(--font-display);font-weight:700;line-height:1.2;color:var(--text);}
+    h1{font-size:clamp(2.4rem,6vw,4.5rem);}
+    h2{font-size:clamp(1.7rem,4vw,2.5rem);}
+    h3{font-size:1.3rem;}
+    p{color:var(--text-muted);line-height:1.8;}
+    a{color:inherit;text-decoration:none;}
+    ul{list-style:none;}
+    .container{max-width:1100px;margin:0 auto;padding:0 2rem;}
+    .section{padding:5rem 0;}
+    .grid-2{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.5rem;}
+    .grid-3{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:1.5rem;}
+    .grid-4{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:1.25rem;}
+    .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1.75rem;transition:all .3s;}
+    .card:hover{border-color:var(--border-accent);transform:translateY(-2px);}
+    .btn{display:inline-flex;align-items:center;gap:.5rem;padding:.75rem 1.75rem;border-radius:var(--radius-sm);font-size:.875rem;font-weight:500;transition:all .3s;cursor:pointer;border:none;font-family:var(--font-body);}
+    .btn-primary{background:var(--gold);color:#0a0a0a;} .btn-primary:hover{background:#f0ce5a;}
+    .btn-outline{background:transparent;color:var(--text);border:1px solid var(--border);} .btn-outline:hover{border-color:var(--gold);color:var(--gold);}
+    .tag{display:inline-flex;align-items:center;padding:.25rem .75rem;border-radius:999px;font-size:.7rem;font-weight:500;letter-spacing:.05em;font-family:var(--font-mono);}
+    .tag-gold{background:var(--gold-dim);color:var(--gold);border:1px solid var(--border-accent);}
+    .tag-outline{background:transparent;color:var(--text-muted);border:1px solid var(--border);}
+    .label{font-family:var(--font-mono);font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);display:block;margin-bottom:.75rem;}
+    .divider{height:1px;background:var(--border);margin:2.5rem 0;}
+    .progress-bar{height:4px;background:var(--surface3);border-radius:2px;overflow:hidden;margin-top:.5rem;}
+    .progress-fill{height:100%;background:linear-gradient(90deg,var(--gold),#f0ce5a);border-radius:2px;}
+    .timeline{position:relative;padding-left:2rem;}
+    .timeline::before{content:'';position:absolute;left:0;top:8px;bottom:8px;width:1px;background:var(--border);}
+    .timeline-item{position:relative;padding-bottom:2.5rem;}
+    .timeline-item:last-child{padding-bottom:0;}
+    .timeline-dot{position:absolute;left:-2.375rem;top:6px;width:10px;height:10px;border-radius:50%;background:var(--gold);border:2px solid var(--primary);box-shadow:0 0 0 4px var(--gold-dim);}
+    .timeline-date{font-family:var(--font-mono);font-size:.72rem;color:var(--gold);letter-spacing:.1em;margin-bottom:.5rem;}
+    .form-group{margin-bottom:1.25rem;}
+    .form-label{display:block;font-size:.78rem;font-weight:500;color:var(--text-muted);letter-spacing:.05em;text-transform:uppercase;margin-bottom:.5rem;font-family:var(--font-mono);}
+    .form-input,.form-textarea{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:.875rem 1rem;color:var(--text);font-family:var(--font-body);font-size:.9rem;transition:all .3s;outline:none;resize:vertical;}
+    .form-input:focus,.form-textarea:focus{border-color:var(--gold);background:var(--surface3);}
+    .form-input::placeholder,.form-textarea::placeholder{color:var(--text-dim);}
+    @keyframes fadeInUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+    @keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}
+    @keyframes shimmer{0%,100%{opacity:.5;}50%{opacity:1;}}
+    .fade-up{animation:fadeInUp .6s ease both;}
+    .d1{animation-delay:.1s;} .d2{animation-delay:.2s;} .d3{animation-delay:.3s;} .d4{animation-delay:.4s;}
+
+    /* ── NAV ── */
+    nav{position:fixed;top:0;left:0;right:0;height:var(--nav-h);background:rgba(10,10,10,.88);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);z-index:1000;}
+    .nav-inner{display:flex;align-items:center;justify-content:space-between;height:100%;max-width:1100px;margin:0 auto;padding:0 2rem;}
+    .nav-logo{font-family:var(--font-display);font-size:1.4rem;font-weight:700;}
+    .nav-logo span{color:var(--gold);}
+    .nav-links{display:flex;align-items:center;gap:.15rem;flex-wrap:wrap;}
+    .nav-links a{font-size:.78rem;font-weight:500;letter-spacing:.03em;padding:.35rem .65rem;border-radius:var(--radius-sm);color:var(--text-muted);transition:all .25s;}
+    .nav-links a:hover,.nav-links a.active{color:var(--gold);background:var(--surface2);}
+    .hamburger{display:none;background:none;border:none;color:var(--text);font-size:1.4rem;cursor:pointer;padding:.5rem;}
+    @media(max-width:768px){.nav-links{display:none;flex-direction:column;position:absolute;top:var(--nav-h);left:0;right:0;background:rgba(10,10,10,.97);padding:1rem;border-bottom:1px solid var(--border);}.nav-links.open{display:flex;}.hamburger{display:block;}}
+
+    /* ── PAGE sections ── */
+    .page-section{display:none;} .page-section.active{display:block;}
+
+    /* ── HERO ── */
+    #home-hero{min-height:100vh;display:flex;align-items:center;padding-top:var(--nav-h);background:radial-gradient(ellipse 60% 50% at 70% 40%,rgba(232,197,71,.07) 0%,transparent 70%),var(--primary);position:relative;overflow:hidden;}
+    .hero-bg-text{position:absolute;right:-5%;top:50%;transform:translateY(-50%);font-size:clamp(7rem,18vw,14rem);font-family:var(--font-display);font-weight:700;color:rgba(255,255,255,.02);user-select:none;line-height:1;pointer-events:none;}
+    .glow-dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--gold);box-shadow:0 0 12px var(--gold);animation:shimmer 2s ease-in-out infinite;margin-right:.5rem;}
+    .scroll-hint{position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:.5rem;}
+    .scroll-label{font-family:var(--font-mono);font-size:.62rem;letter-spacing:.15em;color:var(--text-dim);text-transform:uppercase;}
+    .scroll-line{width:1px;height:36px;background:linear-gradient(to bottom,var(--gold),transparent);animation:float 2s ease-in-out infinite;}
+
+    /* ── page hero banner ── */
+    .page-hero{padding:calc(var(--nav-h) + 4rem) 0 4rem;background:linear-gradient(180deg,var(--surface) 0%,var(--primary) 100%);border-bottom:1px solid var(--border);position:relative;}
+    .page-hero::before{content:'';position:absolute;top:-50%;right:-10%;width:450px;height:450px;background:radial-gradient(circle,rgba(232,197,71,.06) 0%,transparent 70%);pointer-events:none;}
+
+    /* ── GALLERY grid ── */
+    .gallery-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1rem;}
+    .gallery-card{aspect-ratio:1;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);position:relative;overflow:hidden;cursor:pointer;display:flex;flex-direction:column;justify-content:flex-end;padding:1rem;transition:all .3s;}
+    .gallery-card:hover{border-color:var(--border-accent);}
+    .gallery-emoji{position:absolute;top:50%;left:50%;transform:translate(-50%,-60%);font-size:3.5rem;opacity:.55;pointer-events:none;}
+    .gallery-info{position:relative;z-index:1;}
+
+    footer{background:var(--surface);border-top:1px solid var(--border);padding:2.5rem 0;text-align:center;}
+    footer p{font-size:.82rem;color:var(--text-dim);}
+    footer a{color:var(--gold);}
+  </style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════
+     NAVIGATION
+══════════════════════════════════ -->
+<nav>
+  <div class="nav-inner">
+    <a href="#" class="nav-logo" onclick="showPage('home')">L<span>.</span></a>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="#" onclick="showPage('home')"         class="active" data-page="home">Home</a></li>
+      <li><a href="#" onclick="showPage('about')"        data-page="about">About</a></li>
+      <li><a href="#" onclick="showPage('skills')"       data-page="skills">Skills</a></li>
+      <li><a href="#" onclick="showPage('projects')"     data-page="projects">Projects</a></li>
+      <li><a href="#" onclick="showPage('hobbies')"      data-page="hobbies">Hobbies</a></li>
+      <li><a href="#" onclick="showPage('education')"    data-page="education">Education</a></li>
+      <li><a href="#" onclick="showPage('achievements')" data-page="achievements">Awards</a></li>
+      <li><a href="#" onclick="showPage('resume')"       data-page="resume">Resume</a></li>
+      <li><a href="#" onclick="showPage('contact')"      data-page="contact">Contact</a></li>
+      <li><a href="#" onclick="showPage('gallery')"      data-page="gallery">Gallery</a></li>
+    </ul>
+    <button class="hamburger" onclick="toggleMenu()" aria-label="Toggle menu">☰</button>
+  </div>
+</nav>
+
+<main>
+
+<!-- ══════ HOME ══════ -->
+<div id="page-home" class="page-section active">
+  <section id="home-hero">
+    <span class="hero-bg-text" aria-hidden="true">RUSSEL</span>
+    <div class="container">
+      <div style="max-width:660px;">
+        <div class="fade-up" style="margin-bottom:1rem;">
+          <span class="glow-dot"></span>
+          <span style="font-family:var(--font-mono);font-size:.76rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);">Available for opportunities</span>
+        </div>
+        <h1 class="fade-up d1" style="margin-bottom:1.25rem;line-height:1.1;">
+          Hi, I&apos;m <span style="color:var(--gold);">Russel</span><br>
+          <span style="font-style:italic;font-size:.85em;color:var(--text-muted);">Learner &amp; Creator</span>
+        </h1>
+        <p class="fade-up d2" style="font-size:1.05rem;max-width:500px;margin-bottom:2.5rem;">
+          A college student passionate about technology, web development, and building things that matter. Always learning, always creating.
+        </p>
+        <div class="fade-up d3" style="display:flex;gap:1rem;flex-wrap:wrap;">
+          <button class="btn btn-primary" onclick="showPage('projects')">View My Work →</button>
+          <button class="btn btn-outline" onclick="showPage('contact')">Get In Touch</button>
+        </div>
+      </div>
+    </div>
+    <div class="scroll-hint">
+      <span class="scroll-label">scroll</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <section class="section" style="background:var(--surface);">
+    <div class="container">
+      <p class="label" style="text-align:center;">Navigate</p>
+      <h2 style="text-align:center;margin-bottom:3rem;">Explore My Portfolio</h2>
+      <div class="grid-3">
+        <button class="card" onclick="showPage('about')"        style="text-align:left;cursor:pointer;"><div style="font-size:2rem;margin-bottom:.75rem;">👤</div><h3 style="font-size:1rem;margin-bottom:.25rem;">About Me</h3><p style="font-size:.84rem;">Who I am and what drives me</p></button>
+        <button class="card" onclick="showPage('skills')"       style="text-align:left;cursor:pointer;"><div style="font-size:2rem;margin-bottom:.75rem;">⚡</div><h3 style="font-size:1rem;margin-bottom:.25rem;">Skills</h3><p style="font-size:.84rem;">Technologies and tools I use</p></button>
+        <button class="card" onclick="showPage('projects')"     style="text-align:left;cursor:pointer;"><div style="font-size:2rem;margin-bottom:.75rem;">🚀</div><h3 style="font-size:1rem;margin-bottom:.25rem;">Projects</h3><p style="font-size:.84rem;">Things I have built</p></button>
+        <button class="card" onclick="showPage('hobbies')"      style="text-align:left;cursor:pointer;"><div style="font-size:2rem;margin-bottom:.75rem;">🎨</div><h3 style="font-size:1rem;margin-bottom:.25rem;">Hobbies</h3><p style="font-size:.84rem;">What I do for fun</p></button>
+        <button class="card" onclick="showPage('education')"    style="text-align:left;cursor:pointer;"><div style="font-size:2rem;margin-bottom:.75rem;">🎓</div><h3 style="font-size:1rem;margin-bottom:.25rem;">Education</h3><p style="font-size:.84rem;">My academic background</p></button>
+        <button class="card" onclick="showPage('achievements')" style="text-align:left;cursor:pointer;"><div style="font-size:2rem;margin-bottom:.75rem;">🏆</div><h3 style="font-size:1rem;margin-bottom:.25rem;">Achievements</h3><p style="font-size:.84rem;">Awards and recognitions</p></button>
+        <button class="card" onclick="showPage('resume')"       style="text-align:left;cursor:pointer;"><div style="font-size:2rem;margin-bottom:.75rem;">📄</div><h3 style="font-size:1rem;margin-bottom:.25rem;">Resume / CV</h3><p style="font-size:.84rem;">My professional summary</p></button>
+        <button class="card" onclick="showPage('contact')"      style="text-align:left;cursor:pointer;"><div style="font-size:2rem;margin-bottom:.75rem;">✉️</div><h3 style="font-size:1rem;margin-bottom:.25rem;">Contact</h3><p style="font-size:.84rem;">Let's work together</p></button>
+        <button class="card" onclick="showPage('gallery')"      style="text-align:left;cursor:pointer;"><div style="font-size:2rem;margin-bottom:.75rem;">🖼️</div><h3 style="font-size:1rem;margin-bottom:.25rem;">Gallery</h3><p style="font-size:.84rem;">A visual collection</p></button>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ══════ ABOUT ══════ -->
+<div id="page-about" class="page-section">
+  <div class="page-hero">
+    <div class="container">
+      <span class="label">01 / About</span>
+      <h1>About Me</h1>
+      <p style="max-width:500px;margin-top:1rem;font-size:1.05rem;">A little about who I am, where I come from, and what drives me.</p>
+    </div>
+  </div>
+  <section class="section"><div class="container">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:4rem;align-items:start;">
+      <div>
+       <div style="
+  width: 100%;
+  max-width: 420px;
+  border-radius: 16px;
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+">
+  <img
+    src="Pictures/russ.jpg"
+    alt="Lucido"
+    style="
+      width: 100%;
+      height: auto;
+      display: block;
+    "
+  />
+</div>
+        <div style="display:flex;gap:.5rem;flex-wrap:wrap;">
+          <span class="tag tag-gold">Philippines</span>
+          <span class="tag tag-gold">College Student</span>
+          <span class="tag tag-gold">Lifelong Learner</span>
+        </div>
+      </div>
+      <div>
+        <span class="label">My Story</span>
+        <h2 style="margin-bottom:1.5rem;">Hello, I'm Russel</h2>
+        <p style="margin-bottom:1.25rem;">I'm a college student who's just starting to find my way into the world of technology. I've picked up the basics of programming — enough to get a simple script running or follow along in class — and I'm slowly realizing how much I still have to learn.
+
+I enjoy tinkering with small projects and figuring things out as I go. It's a little frustrating sometimes, but also kind of exciting when something finally clicks.
+
+Outside of studying, I like music, hanging out with friends, and occasionally pretending I understand what I'm coding.</p>
+        <p style="margin-bottom:1.25rem;">I enjoy working on both front-end and back-end development, and I'm always exploring new technologies to sharpen my craft.</p>
+        <p>Outside of coding, I find inspiration in art, music, and connecting with people.</p>
+        <div class="divider"></div>
+        <div class="grid-2" style="gap:1rem;">
+          <div><p style="font-family:var(--font-mono);font-size:.72rem;color:var(--gold);text-transform:uppercase;letter-spacing:.1em;">Name</p><p style="color:var(--text);font-weight:500;">Ariel Russel Lucido</p></div>
+          <div><p style="font-family:var(--font-mono);font-size:.72rem;color:var(--gold);text-transform:uppercase;letter-spacing:.1em;">Location</p><p style="color:var(--text);font-weight:500;">San Pablo City,Philippines</p></div>
+          <div><p style="font-family:var(--font-mono);font-size:.72rem;color:var(--gold);text-transform:uppercase;letter-spacing:.1em;">Focus</p><p style="color:var(--text);font-weight:500;">Learning The Basics</p></div>
+          <div><p style="font-family:var(--font-mono);font-size:.72rem;color:var(--gold);text-transform:uppercase;letter-spacing:.1em;">Status</p><p style="color:var(--text);font-weight:500;">Currently Studying</p></div>
+        </div>
+      </div>
+    </div>
+  </div></section>
+</div>
+
+<!-- ══════ SKILLS ══════ -->
+<div id="page-skills" class="page-section">
+  <div class="page-hero">
+    <div class="container">
+      <span class="label">03 / Skills</span>
+      <h1>Skills</h1>
+      <p style="max-width:480px;margin-top:1rem;font-size:1.05rem;">A snapshot of what I know and how I work with others.</p>
+    </div>
+  </div>
+  <section class="section"><div class="container">
+    <div class="grid-2" style="gap:2rem;">
+
+      <!-- Technical Skills -->
+      <div class="card">
+        <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:1.5rem;">
+          <div style="width:36px;height:36px;border-radius:8px;background:var(--gold-dim);border:1px solid var(--border-accent);display:flex;align-items:center;justify-content:center;font-size:1.1rem;">💻</div>
+          <p style="font-family:var(--font-mono);font-size:.8rem;color:var(--gold);letter-spacing:.1em;text-transform:uppercase;">Technical Skills</p>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:.5rem;">
+          <span class="tag tag-gold">Basic Computer Skills</span>
+          <span class="tag tag-gold">Photo &amp; Video Editing</span>
+          <span class="tag tag-gold">UI/UX Designing</span>
+          <span class="tag tag-gold">Graphic Designing</span>
+          <span class="tag tag-gold">Content Creating</span>
+        </div>
+      </div>
+
+      <!-- Professional & Soft Skills -->
+      <div class="card">
+        <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:1.5rem;">
+          <div style="width:36px;height:36px;border-radius:8px;background:var(--gold-dim);border:1px solid var(--border-accent);display:flex;align-items:center;justify-content:center;font-size:1.1rem;">🤝</div>
+          <p style="font-family:var(--font-mono);font-size:.8rem;color:var(--gold);letter-spacing:.1em;text-transform:uppercase;">Professional &amp; Soft Skills</p>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:.5rem;">
+          <span class="tag tag-gold">Problem Solving &amp; Logical Thinking</span>
+          <span class="tag tag-gold">Teamwork &amp; Collaboration</span>
+          <span class="tag tag-gold">Time Management</span>
+          <span class="tag tag-gold">Adaptability &amp; Quick Learning</span>
+          <span class="tag tag-gold">Communication (Written &amp; Verbal)</span>
+        </div>
+      </div>
+
+    </div>
+  </div></section>
+</div>
+
+<!-- ══════ PROJECTS ══════ -->
+<div id="page-projects" class="page-section">
+  <div class="page-hero">
+    <div class="container">
+      <span class="label">04 / Projects</span>
+      <h1>Projects</h1>
+      <p style="max-width:500px;margin-top:1rem;font-size:1.05rem;">A selection of things I've built — from school projects to personal experiments.</p>
+    </div>
+  </div>
+  <section class="section"><div class="container"><div class="grid-3" id="projects-grid"></div></div></section>
+</div>
+
+<!-- ══════ HOBBIES ══════ -->
+<div id="page-hobbies" class="page-section">
+  <div class="page-hero">
+    <div class="container">
+      <span class="label">05 / Hobbies</span>
+      <h1>Hobbies</h1>
+      <p style="max-width:480px;margin-top:1rem;font-size:1.05rem;">What I do when I'm not coding — things that fuel my creativity.</p>
+    </div>
+  </div>
+  <section class="section"><div class="container"><div class="grid-4" id="hobbies-grid"></div></div></section>
+</div>
+
+<!-- ══════ EDUCATION ══════ -->
+<div id="page-education" class="page-section">
+  <div class="page-hero">
+    <div class="container">
+      <span class="label">06 / Education</span>
+      <h1>Educational Background</h1>
+      <p style="max-width:500px;margin-top:1rem;font-size:1.05rem;">My academic journey and the knowledge I've gathered along the way.</p>
+    </div>
+  </div>
+  <section class="section"><div class="container">
+    <div class="timeline" id="education-timeline"></div>
+    <div style="margin-top:4rem;">
+      <span class="label">Certifications</span>
+      <h2 style="margin-bottom:2rem;">Certificates &amp; Courses</h2>
+      <div class="grid-2" id="certs-grid"></div>
+    </div>
+  </div></section>
+</div>
+
+<!-- ══════ ACHIEVEMENTS ══════ -->
+<div id="page-achievements" class="page-section">
+  <div class="page-hero">
+    <div class="container">
+      <span class="label">07 / Achievements</span>
+      <h1>Achievements &amp; Awards</h1>
+      <p style="max-width:500px;margin-top:1rem;font-size:1.05rem;">Recognitions and milestones that mark my journey.</p>
+    </div>
+  </div>
+  <section class="section"><div class="container">
+    <div class="grid-3" style="margin-bottom:4rem;">
+    </div>
+    <div class="grid-2" id="awards-grid"></div>
+  </div></section>
+</div>
+
+<!-- ══════ RESUME ══════ -->
+<div id="page-resume" class="page-section">
+  <div class="page-hero">
+    <div class="container">
+      <span class="label">08 / Resume</span>
+      <h1>Resume / CV</h1>
+      <p style="max-width:480px;margin-top:1rem;font-size:1.05rem;">A summary of my professional profile, education, and experience.</p>
+    </div>
+  </div>
+  <section class="section"><div class="container">
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;">
+      <div style="background:var(--surface2);border-bottom:1px solid var(--border);padding:2.5rem;display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:1.5rem;">
+        <div>
+          <h2 style="font-size:2rem;margin-bottom:.25rem;">Ariel Russel A. Lucido</h2>
+          <p style="color:var(--gold);font-weight:500;font-size:1rem;margin-bottom:.75rem;">College Student · Aspiring Developer</p>
+          <div style="display:flex;gap:1.25rem;flex-wrap:wrap;">
+            <span style="font-size:.78rem;color:var(--text-muted);font-family:var(--font-mono);">📧 arielrussellucido3623@gmail.com</span>
+            <span style="font-size:.78rem;color:var(--text-muted);font-family:var(--font-mono);">📍 San Pablo City,Philippines</span>
+            <span style="font-size:.78rem;color:var(--text-muted);font-family:var(--font-mono);"></span>
+          </div>
+        </div>
+        <img src="pictures/pic.jpg" alt="Russel" style="width:64px;height:64px;border-radius:50%;border:2px solid var(--border-accent);object-fit:cover;display:block;">
+      </div>
+      <div style="padding:2rem 2.5rem;display:grid;grid-template-columns:repeat(auto-fit,minmax(px,1fr));gap:2.5rem;">
+        <div>
+          <p style="font-family:var(--font-mono);font-size:.72rem;color:var(--gold);text-transform:uppercase;letter-spacing:.15em;margin-bottom:.75rem;">Objective</p>
+          <p style="font-size:.9rem;">A college student with a basic understanding of programming, eager to grow my skills and explore what technology has to offer. Looking for opportunities to learn in a real-world setting and gradually build my way up from the fundamentals.</p>
+        </div>
+        <div>
+          <p style="font-family:var(--font-mono);font-size:.72rem;color:var(--gold);text-transform:uppercase;letter-spacing:.15em;margin-bottom:.75rem;">Technical Skills</p>
+          <div style="display:flex;flex-wrap:wrap;gap:.4rem;">
+            <span class="tag tag-gold" style="font-size:.68rem;">Basic Computer Skills</span><span class="tag tag-gold" style="font-size:.68rem;">Photo & Video Editing</span><span class="tag tag-gold" style="font-size:.68rem;">UI/UX Designing</span><span class="tag tag-gold" style="font-size:.68rem;">Graphic Designing</span><span class="tag tag-gold" style="font-size:.68rem;">Content Creating</span></div>
+            <p style="font-family:var(--font-mono);font-size:.72rem;color:var(--gold);text-transform:uppercase;letter-spacing:.15em;margin-bottom:.75rem;">Professional & Soft Skills</p>
+          <div style="display:flex;flex-wrap:wrap;gap:.4rem;">
+            <span class="tag tag-gold" style="font-size:.68rem;">Problem Solving & Logical Thinking</span><span class="tag tag-gold" style="font-size:.68rem;">Teamwork & Collaboration</span><span class="tag tag-gold" style="font-size:.68rem;">Time Management</span><span class="tag tag-gold" style="font-size:.68rem;">Adaptabilty & Quick Learning</span><span class="tag tag-gold" style="font-size:.68rem;">Communication (Written & Verbal)</span></div>
+        </div>
+        </div>
+        <div>
+          <p style="font-family:var(--font-mono);font-size:.72rem;color:var(--gold);text-transform:uppercase;letter-spacing:.15em;margin-bottom:.75rem;">Education</p>
+          <div style="margin-bottom:1rem;"><p style="font-size:.875rem;font-weight:600;color:var(--text);">BS Information Technology</p><p style="font-size:.78rem;color:var(--text-muted);">Pamantasan ng Lungsod ng San Pablo</p><p style="font-size:.72rem;color:var(--text-dim);font-family:var(--font-mono);">2024 – Present</p></div>
+          <div><p style="font-size:.875rem;font-weight:600;color:var(--text);">Secondary Education</p><p style="font-size:.78rem;color:var(--text-muted);">Col. Lauro D. Dizon Memorial National High School</p><p style="font-size:.72rem;color:var(--text-dim);font-family:var(--font-mono);">2005 – 2009</p></div>
+        </div>
+        <div>
+          <p style="font-family:var(--font-mono);font-size:.72rem;color:var(--gold);text-transform:uppercase;letter-spacing:.15em;margin-bottom:.75rem;">Experience</p>
+          <div style="margin-bottom:1rem;"><p style="font-size:.875rem;font-weight:600;color:var(--text);">Statistical Researcher & Team Supervisor</p><p style="font-size:.78rem;color:var(--text-muted);">Philippine Statistics Authority</p><p style="font-size:.72rem;color:var(--text-dim);font-family:var(--font-mono);">2015-2022</p><p style="font-size:.83rem;margin-top:.25rem;">responsible for the planning, data collection, processing, and post-evaluation of national censuses and surveys.</p></div>
+          <div><p style="font-size:.875rem;font-weight:600;color:var(--text);">Production Operator</p><p style="font-size:.78rem;color:var(--text-muted);">Brother Industries Philippines</p><p style="font-size:.72rem;color:var(--text-dim);font-family:var(--font-mono);">2017-2018</p><p style="font-size:.83rem;margin-top:.25rem;">Operating assembly line machinery and performing quality checks.</p></div>
+        </div>
+      </div>
+    </div>
+  </div></section>
+</div>
+
+<!-- ══════ CONTACT ══════ -->
+<div id="page-contact" class="page-section">
+  <div class="page-hero">
+    <div class="container">
+      <span class="label">09 / Contact</span>
+      <h1>Get In Touch</h1>
+      <p style="max-width:480px;margin-top:1rem;font-size:1.05rem;">Still figuring things out, but always open to a chat — whether it's about coding, school stuff, or just saying hi!</p>
+    </div>
+  </div>
+  <section class="section"><div class="container">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:4rem;align-items:start;">
+      <div>
+        <span class="label">Contact Info</span>
+        <h2 style="margin-bottom:1.5rem;">Let's Connect</h2>
+        <p style="margin-bottom:2rem;">Whether you want to help a beginner learn, work on something small together, or just say hello — feel free to reach out. I'm still learning, but I'm always happy to connect!</p>
+        <a href="mailto:lucido@email.com" class="card" style="display:flex;align-items:center;gap:1rem;margin-bottom:.75rem;"><span style="font-size:1.4rem;">📧</span><div><p style="font-size:.72rem;color:var(--text-dim);font-family:var(--font-mono);text-transform:uppercase;letter-spacing:.08em;">Email</p><p style="font-size:.875rem;color:var(--gold);font-weight:500;">arielrussellucido3623@gmail.com</p></div></a>
+        <form id="contact-form" class="card" style="padding:2rem;" onsubmit="submitForm(event)">
+          <h3 style="margin-bottom:1.5rem;">Send a Message</h3>
+          <div class="form-group"><label class="form-label">Your Name</label><input class="form-input" type="text" placeholder="Juan Dela Cruz" required /></div>
+          <div class="form-group"><label class="form-label">Email Address</label><input class="form-input" type="email" placeholder="juan@email.com" required /></div>
+          <div class="form-group"><label class="form-label">Subject</label><input class="form-input" type="text" placeholder="Project collaboration..." required /></div>
+          <div class="form-group"><label class="form-label">Message</label><textarea class="form-textarea" rows="5" placeholder="Tell me about your project..." required></textarea></div>
+          <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;">Send Message →</button>
+        </form>
+        <div id="contact-success" style="display:none;" class="card" style="text-align:center;padding:3rem;">
+          <div style="font-size:3rem;margin-bottom:1rem;">✅</div>
+          <h3 style="margin-bottom:.5rem;">Message Sent!</h3>
+          <p>Thank you for reaching out. I'll get back to you shortly.</p>
+        </div>
+      </div>
+    </div>
+  </div></section>
+</div>
+
+<!-- ══════ GALLERY ══════ -->
+<div id="page-gallery" class="page-section">
+  <div class="page-hero">
+    <div class="container">
+      <span class="label">10 / Gallery</span>
+      <h1>Gallery</h1>
+      <p style="max-width:460px;margin-top:1rem;font-size:1.05rem;">A visual collection of photography, artwork, and moments that inspire me.</p>
+    </div>
+  </div>
+  <section class="section"><div class="container">
+    <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:2.5rem;" id="gallery-filters"></div>
+    <div class="gallery-grid" id="gallery-grid"></div>
+  </div></section>
+</div>
+
+</main>
+
+<footer>
+  <div class="container">
+    <p>© <span id="year"></span> <a href="#" onclick="showPage('home')">Lucido</a> — Built with passion.</p>
+  </div>
+</footer>
+
+<script>
+// ── DATA ──────────────────────────────────────────────────
+
+
+const projects = [
+  {emoji:'🌐',title:'Portfolio Website',desc:'Personal portfolio built with Node.js with a clean dark aesthetic.',stack:['TypeScript','HTML','CSS'],status:'Live',statusColor:'#22c55e'},
+  {emoji:'🏍️',title:'TrikeGo App',desc:'Modernizing San Pablo Citys tricycle transport with real-time tracking and secure payments.',stack:['Figma','Node.js','MySQL'],status:'In Progress',statusColor:'#60a5fa'},
+  {emoji:'🖧',title:'Campus Network Topology in Cisco Packet Tracer',desc:'Designs and builds a campus network layout using Cisco Packet Tracer with complete device placement, IP addressing, and topology structure.',stack:['Cisco Packet Tracer'],status:'Completed',statusColor:'#e8c547'},
+  {emoji:'⏱️',title:'Integrated Time Tracking and Payroll System',desc:'A secure web-based payroll and time tracking system capable of automating attendance tracking and payroll system.',stack:['PHP','MySQL','HTML','CSS','JavaScript'],status:'Completed',statusColor:'#e8c547'},
+];
+
+const hobbies = [
+  {emoji:'🎵',title:'Music',desc:'I play guitar and enjoy a wide range of genres.'},
+  {emoji:'🏀',title:'Sports',desc:'Playing and watching sports keeps me active and teaches me the value of teamwork.'},
+  {emoji:'🎮',title:'Gaming',desc:'Strategy games and RPGs challenge my thinking and storytelling appreciation.'},
+  {emoji:'📸',title:'Photography',desc:'Capturing everyday moments and nature through a lens.'},
+  {emoji:'🎬',title:'Film & Anime',desc:'A big fan of visual storytelling — from indie films to anime series.'},
+];
+
+const education = [
+  {period:'2024 – Present',degree:'BS Information Technology',school:'Pamantasan ng Lungsod ng San Pablo',loc:'Philippines',desc:'Currently studying BSIT with a focus on software development and database management.',highlights:['Software Development','Database Management']},
+  {period:'2005 – 2009',degree:'Secondary Education',school:'Col. Lauro D. Dizon Memorial National Highschool',loc:'Philippines',desc:'Completed secondary education and its requirements.',highlights:['Citizenship Advancement Training','Secondary Education']},
+  {period:'1999 – 2005',degree:'Elementary Education',school:'San Pablo Central School',loc:'Philippines',desc:'Completed basic elementary education. Participated in Mathematics competitions.',highlights:['Science Club','Mathematics Competition']},
+];
+
+const certs = [
+  {name:'NC II — Mechatronics Servicing',org:'Itechnological Institute Inc.',year:'2017'},
+];
+
+const awards = [
+  {emoji:'🥇',title:'1st Place — ICT month 2025, Station Relay',org:'CCST Department PLSP',year:'2025',desc:'Won first place with my team, we successfully completed all the challenges with the fastest time.',type:'Competition',tc:'#60a5fa'},
+  {emoji:'📝',title:'Civil Service Examination Professional Level',org:'Civil Service Commission',year:'2023',desc:'Successfully passed the Civil Service Examination at the Professional Level with the rating of 89.94%',type:'Eligibility',tc:'#e8c547'},
+];
+
+const gallery = [
+
+  {img:'Pictures/family2.jpg', title:'#2023',     cat:'Family', desc:'New Years celebration 2023.'},
+  {img:'Pictures/family.jpg', title:'#2024',     cat:'Family', desc:'New Years celebration 2024.'},
+  {img:'Pictures/delprado.jfif', title:'Villa Del Prado',          cat:'Friends', desc:'Our team huddle before entering the resort.'},
+  {img:'Pictures/ilog1.jpg', title:'Confidants',          cat:'Friends', desc:'A good day out with the original crew — just us, a bamboo raft, and the river.'},
+  {img:'Pictures/sports.jpg', title:'First Win', cat:'Sports',         desc:'First win in a basketball tournament with my friends — a moment of pure joy and teamwork.'},
+  {img:'Pictures/rheamae.jfif',   title:'Only Us',            cat:'My One and Only', desc:'Me and my girlfriend, sharing a sweet moment together.'},
+  {img:'Pictures/meandmyjowa.jfif',   title:'Me and My Jowa',            cat:'My One and Only', desc:'Another sweet moment shared with my partner.'},
+  {img:'Pictures/rhea2.jfif',   title:'Best View',            cat:'My One and Only', desc:'A view I could never get tired of looking at.'},
+];
+
+
+// ── RENDER HELPERS ────────────────────────────────────────
+
+function renderProjects() {
+  document.getElementById('projects-grid').innerHTML = projects.map(p=>`
+    <div class="card" style="display:flex;flex-direction:column;gap:1rem;">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+        <span style="font-size:2rem;">${p.emoji}</span>
+        <span style="font-family:var(--font-mono);font-size:.65rem;padding:.2rem .6rem;border-radius:999px;border:1px solid ${p.statusColor}44;color:${p.statusColor};background:${p.statusColor}11;">${p.status}</span>
+      </div>
+      <div><h3 style="font-size:1rem;margin-bottom:.5rem;">${p.title}</h3><p style="font-size:.875rem;">${p.desc}</p></div>
+      <div style="display:flex;flex-wrap:wrap;gap:.4rem;margin-top:auto;">${p.stack.map(t=>`<span class="tag tag-outline" style="font-size:.68rem;">${t}</span>`).join('')}</div>
+    </div>`).join('');
+}
+
+function renderHobbies() {
+  document.getElementById('hobbies-grid').innerHTML = hobbies.map(h=>`
+    <div class="card" style="text-align:center;padding:2rem 1.5rem;">
+      <div style="font-size:2.5rem;margin-bottom:1rem;">${h.emoji}</div>
+      <h3 style="font-size:1rem;margin-bottom:.5rem;">${h.title}</h3>
+      <p style="font-size:.84rem;">${h.desc}</p>
+    </div>`).join('');
+}
+
+function renderEducation() {
+  document.getElementById('education-timeline').innerHTML = education.map(e=>`
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="timeline-date">${e.period}</div>
+      <div class="card" style="margin-top:.75rem;">
+        <h3 style="font-size:1.1rem;margin-bottom:.25rem;">${e.degree}</h3>
+        <p style="font-size:.85rem;color:var(--gold);font-weight:500;margin-bottom:.75rem;">${e.school} — ${e.loc}</p>
+        <p style="font-size:.9rem;margin-bottom:1rem;">${e.desc}</p>
+        <div style="display:flex;flex-wrap:wrap;gap:.4rem;">${e.highlights.map(h=>`<span class="tag tag-gold" style="font-size:.68rem;">${h}</span>`).join('')}</div>
+      </div>
+    </div>`).join('');
+
+  document.getElementById('certs-grid').innerHTML = certs.map(c=>`
+    <div class="card" style="display:flex;align-items:center;gap:1rem;">
+      <div style="width:44px;height:44px;border-radius:50%;background:var(--gold-dim);border:1px solid var(--border-accent);display:flex;align-items:center;justify-content:center;font-size:1.25rem;flex-shrink:0;">📜</div>
+      <div>
+        <p style="font-size:.875rem;font-weight:600;color:var(--text);margin-bottom:.15rem;">${c.name}</p>
+        <p style="font-size:.78rem;color:var(--text-muted);">${c.org} · ${c.year}</p>
+      </div>
+    </div>`).join('');
+}
+
+function renderAwards() {
+  document.getElementById('awards-grid').innerHTML = awards.map(a=>`
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:.75rem;">
+        <span style="font-size:2rem;">${a.emoji}</span>
+        <div style="display:flex;gap:.4rem;align-items:center;">
+          <span style="font-family:var(--font-mono);font-size:.65rem;color:${a.tc};padding:.15rem .5rem;border:1px solid ${a.tc}44;border-radius:999px;background:${a.tc}11;">${a.type}</span>
+          <span style="font-family:var(--font-mono);font-size:.65rem;color:var(--text-dim);">${a.year}</span>
+        </div>
+      </div>
+      <h3 style="font-size:.975rem;margin-bottom:.25rem;">${a.title}</h3>
+      <p style="font-size:.8rem;color:var(--gold);font-weight:500;margin-bottom:.5rem;">${a.org}</p>
+      <p style="font-size:.875rem;">${a.desc}</p>
+    </div>`).join('');
+}
+
+let activeFilter = 'All';
+function renderGallery(filter) {
+  activeFilter = filter || 'All';
+  const cats = ['All', ...new Set(gallery.map(g => g.cat))];
+
+  document.getElementById('gallery-filters').innerHTML = cats.map(c => `
+    <span class="tag ${c === activeFilter ? 'tag-gold' : 'tag-outline'}"
+      style="cursor:pointer;padding:.35rem .9rem;font-size:.78rem;"
+      onclick="renderGallery('${c}')">${c}</span>`).join('');
+
+  const items = activeFilter === 'All' ? gallery : gallery.filter(g => g.cat === activeFilter);
+
+  document.getElementById('gallery-grid').innerHTML = items.map(g => `
+    <div class="gallery-card" style="padding:0;">
+      <img src="${g.img}" alt="${g.title}"
+        style="width:100%;height:100%;object-fit:cover;position:absolute;top:0;left:0;border-radius:var(--radius);"
+        onerror="this.style.display='none'">
+      <div class="gallery-info" style="position:relative;z-index:1;padding:1rem;background:linear-gradient(transparent,rgba(0,0,0,0.7));position:absolute;bottom:0;left:0;right:0;border-radius:0 0 var(--radius) var(--radius);">
+        <p style="font-family:var(--font-mono);font-size:.62rem;color:var(--gold);letter-spacing:.1em;text-transform:uppercase;">${g.cat}</p>
+        <p style="font-size:.85rem;font-weight:600;color:#fff;line-height:1.3;">${g.title}</p>
+        <p style="font-size:.75rem;color:rgba(255,255,255,0.7);margin-top:.2rem;">${g.desc}</p>
+      </div>
+    </div>`).join('');
+    }
+
+// ── NAVIGATION ────────────────────────────────────────────
+function showPage(id) {
+  document.querySelectorAll('.page-section').forEach(s=>s.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  document.querySelectorAll('.nav-links a').forEach(a=>{
+    a.classList.toggle('active', a.dataset.page===id);
+  });
+  document.getElementById('nav-links').classList.remove('open');
+  window.scrollTo({top:0,behavior:'smooth'});
+  return false;
+}
+
+function toggleMenu() {
+  document.getElementById('nav-links').classList.toggle('open');
+}
+
+function submitForm(e) {
+  e.preventDefault();
+  document.getElementById('contact-form').style.display='none';
+  document.getElementById('contact-success').style.display='block';
+}
+
+// ── INIT ──────────────────────────────────────────────────
+document.getElementById('year').textContent = new Date().getFullYear();
+renderProjects();
+renderHobbies();
+renderEducation();
+renderAwards();
+renderGallery('All');
+</script>
+</body>
+</html>
